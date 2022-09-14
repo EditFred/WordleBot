@@ -1,7 +1,7 @@
 import React,{useState} from 'react';
 import { dothis, solveWord, start } from '../mechanics/Filter';
 
-const SubmitTarget = () => {
+const SubmitTarget = ({setGuesses}) => {
     const [userInput, setUserInput] = useState('');
     const [guess1, setGuess1] = useState('')
 
@@ -9,7 +9,7 @@ const SubmitTarget = () => {
     const handleSubmit = (event) =>{
         event.preventDefault()
         //console.log('guess1',guess1)
-        solveWord(userInput.toUpperCase(), guess1)
+        setGuesses(solveWord(userInput.toUpperCase(), guess1))
     }
 
     return (

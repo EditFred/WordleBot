@@ -122,6 +122,8 @@ const processGuessResult = (guessWord, targetWord) => {
             validLetters.push(guessWord[i])
         }else if(!validLetters.includes(guessWord[i])){
             inValidLetters.push(guessWord[i])
+        }else if(targetWord.includes(guessWord[i]) && matchWord[i]!==guessWord[i] && matchWord[i]!== '-'){
+            incorrectLetterArrArr[i].push(guessWord[i])
         }
     }
 }
@@ -142,16 +144,11 @@ const fillRemainingLettObj = (word, targetWord) => {
 }
 
 
-
-
-
-
-
-
 const solveWord= (target, userGuess) =>{
     startGame()
     let solved = false;
     let guessNum = 0
+    let guesses = []
     while(!solved){
         let guess;
         if(guessNum === 0 && userGuess){
@@ -159,6 +156,7 @@ const solveWord= (target, userGuess) =>{
         }else{
         guess = chooseWord(guessNum)}
         console.log(`Guess ${guessNum + 1}: ${guess}`)
+        guesses.push(guess)
         
         
         if(guess === target){solved= true}
@@ -170,6 +168,7 @@ const solveWord= (target, userGuess) =>{
         console.log(currentValidWords)}
         guessNum++
     }
+    return guesses
 }
 const testObj = {a:2, b:4, c:3, d:9, e:0, g:45}
 const start = () =>{
@@ -177,7 +176,7 @@ const start = () =>{
     // console.log('validSTART',validLetters)
     // console.log('validarrarr', correctLetterArrArr)
     // console.log('invalid', inValidLetters)
-    // console.log('invalidarrarr', incorrectLetterArrArr)
+     console.log('invalidarrarr', incorrectLetterArrArr)
     console.log(remainLettObj)
 }
 
