@@ -26,7 +26,7 @@ const App = () => {
                 word={word}
                 index={index}></Guesses>)
             })
-             : <>bye</>}
+             : null}
         </div>
     )
 }
