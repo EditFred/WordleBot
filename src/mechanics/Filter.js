@@ -1,7 +1,7 @@
 
 import everyWord from './EveryWord'
 import Plurals from './Plurals'
-import topFour from './SecondGuess'
+import optimalGuess from './SecondGuess'
 
 
 let incorrectLetterArrArr = [[], [], [], [], []]
@@ -19,6 +19,8 @@ const startGame = () =>{
     correctLetterArrArr = [[], [], [], [], []]
     inValidLetters = []
     validLetters = []
+    knownValids = []
+    remainLettObj = {}
 }
 //screen for eliminated letters
 const clearInvLetters = (word) => {
@@ -103,13 +105,18 @@ const chooseWord = (guessNumber) => {
     }
     return guessWord
 }
+
 //check word for accuracy against the target word(answer)
 const processGuessResult = (guessWord, targetWord) => {
     let matchWord = targetWord   
     for(let i = 0; i< 5; i++){
         if(guessWord[i] === matchWord[i]){
+            if(!knownValids.includes(guessWord[i])){
+                knownValids.push(guessWord[i]);
+            }
             if(!correctLetterArrArr[i][0]){
                 correctLetterArrArr[i].push(guessWord[i])
+                
             }
             if(!validLetters.includes(matchWord[i])){validLetters.push(matchWord[i])}
             matchWord = matchWord.slice(0,i) + '-' + matchWord.slice(i+1)
@@ -117,6 +124,9 @@ const processGuessResult = (guessWord, targetWord) => {
     }
     for(let i = 0; i<5; i++){
         if(matchWord.includes(guessWord[i])){
+            if(!knownValids.includes(guessWord[i])){
+                knownValids.push(guessWord[i]);
+            }
             if(targetWord[i]!==guessWord[i]){
             incorrectLetterArrArr[i].push(guessWord[i])}
             validLetters.push(guessWord[i])
@@ -127,13 +137,15 @@ const processGuessResult = (guessWord, targetWord) => {
         }
     }
 }
-//find common remaining letters
-const remainLettObj = {}
-const fillRemainingLettObj = (word, targetWord) => {
+let knownValids = []
+//find common remaining letters that aren't guaranteed
+let remainLettObj = {}
+const fillRemainingLettObj = (word) => {
+    // THIS NEEDS WORK FOR REAL
     for(let i = 0; i<5; i++){
         const lett = word[i]
         const objCount = remainLettObj[lett]
-        if(!targetWord.includes(lett)){
+        if(!knownValids.includes(lett)){//needs to be not valid letters
             if(objCount || objCount === 0){
                 remainLettObj[lett] = objCount+1;
             }else{
@@ -153,8 +165,11 @@ const solveWord= (target, userGuess) =>{
         let guess;
         if(guessNum === 0 && userGuess){
             guess = userGuess
+        }else if(guessNum === 1){
+            guess = optimalGuess(remainLettObj, currentValidWords)
         }else{
         guess = chooseWord(guessNum)}
+
         console.log(`Guess ${guessNum + 1}: ${guess}`)
         guesses.push(guess)
         
@@ -165,18 +180,20 @@ const solveWord= (target, userGuess) =>{
             filterInvWords(guessNum, target)
         }
         if(currentValidWords.length<40){
-        console.log(currentValidWords)}
+        console.log('remaining words: ',currentValidWords)
+    }
         guessNum++
     }
     return guesses
 }
 const testObj = {a:2, b:4, c:3, d:9, e:0, g:45}
 const start = () =>{
-    console.log('tests', topFour(testObj))
+    //console.log('tests', topFour(remainLettObj))
     // console.log('validSTART',validLetters)
     // console.log('validarrarr', correctLetterArrArr)
     // console.log('invalid', inValidLetters)
-     console.log('invalidarrarr', incorrectLetterArrArr)
+    // console.log('invalidarrarr', incorrectLetterArrArr)
+    console.log(knownValids)
     console.log(remainLettObj)
 }
 

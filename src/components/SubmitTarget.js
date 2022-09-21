@@ -24,14 +24,14 @@ const SubmitTarget = ({setGuesses}) => {
                 <input value = {userInput} placeholder='Word to Guess' onChange={(event) => {
                     setUserInput(event.target.value)
                 }}></input>
-                <input value = {guess1} placeholder='User Guess' onChange={(event) => {
+                {/* <input value = {guess1} placeholder='User Guess' onChange={(event) => {
                     setGuess1(event.target.value)
-                }}></input>
+                }}></input> */}
                 <button onClick={(event) => handleSubmit(event)}>Solve!</button>
                 <button onClick={(event) =>{
                     event.preventDefault()
                     start()
-                }}>Start</button>
+                }}>Ignore this Button</button>
             </form>
             <div style={{color:'red'}}>{errorMessage}</div>
         </div>
